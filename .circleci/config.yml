@@ -17,7 +17,7 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - run:
-          command: echo "How y'all living!"
+          command: echo "How you living $MY_GOV_INITIALS"
 
 
 # Invoke jobs via workflows
