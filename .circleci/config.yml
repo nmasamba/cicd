@@ -12,7 +12,6 @@ jobs:
     steps:
       - run:
           command: echo "Hello CircleCI world"
-          command: echo "This is a test"
   print_living:
     docker:
       - image: circleci/node:13.8.0
