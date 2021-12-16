@@ -32,6 +32,10 @@ jobs:
           root: ~/
           paths:
             - output.txt
+      - run: return 1
+      - run:
+          name: Warn of failed job
+          command: echo "Error encountered!!!!!!!!!!!!"
 
   print_output_file:
     docker:
