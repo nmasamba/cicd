@@ -2,6 +2,16 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+commands:
+  cmdname:
+      description: " A simple command for ..."
+      parameters:
+        to:
+          type: string
+          default: "All hail the simple command!"
+      steps:
+        - run: echo << parameters.to >>
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -32,6 +42,13 @@ jobs:
       - run:
           command: cat ~/output.txt
 
+  new_cmds_job:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - cmdname:
+          to: "The name is Levelchin. Max Levelchin."
+
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -39,6 +56,7 @@ workflows:
     jobs:
       - print_hello
       - save_hello_world_output
+      - new_cmds_job
       - print_output_file:
           requires: [save_hello_world_output]
       
