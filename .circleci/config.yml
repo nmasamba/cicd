@@ -3,12 +3,12 @@
 version: 2.1
 
 commands:
-  cmdname:
-      description: " A simple command for ..."
+  print_pipeline_id:
+      description: " A simple command for to print pipeline ID"
       parameters:
         to:
           type: string
-          default: "All hail the simple command!"
+          default: "If you're seeing this, it's too late!"
       steps:
         - run: echo << parameters.to >>
 
@@ -46,8 +46,8 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - cmdname:
-          to: "The name is Levelchin. Max Levelchin."
+      - print_pipeline_id:
+          to: $CIRCLE_WORKFLOW_ID
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
