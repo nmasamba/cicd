@@ -32,10 +32,6 @@ jobs:
           root: ~/
           paths:
             - output.txt
-      - run: return 1
-      - run:
-          name: Warn of failed job
-          command: echo "Error encountered!!!!!!!!!!!!"
 
   print_output_file:
     docker:
@@ -52,6 +48,16 @@ jobs:
     steps:
       - print_pipeline_id:
           id: $CIRCLE_WORKFLOW_ID
+
+  error_warn_job:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+    - run: return 1
+      - run:
+          name: Warn of failed job
+          command: echo "Error encountered!!!!!!!!!!!!"
+          when: on_fail
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
