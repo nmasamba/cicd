@@ -67,6 +67,7 @@ workflows:
       - print_hello
       - save_hello_world_output
       - new_cmds_job
+      - error_warn_job
       - print_output_file:
           requires: [save_hello_world_output]
       
