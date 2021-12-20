@@ -1,0 +1,73 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+commands:
+  print_pipeline_id:
+      description: " A simple command for to print pipeline ID"
+      parameters:
+        id:
+          type: string
+          default: "If you're seeing this, it's too late!"
+      steps:
+        - run: echo << parameters.id >>
+
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+jobs:
+  print_hello:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - run:
+          command: echo "How you living $MY_GOV_INITIALS"
+
+  save_hello_world_output:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - run:
+          command: echo "Hello world" >> ~/output.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output.txt
+
+  print_output_file:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          command: cat ~/output.txt
+
+  new_cmds_job:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - print_pipeline_id:
+          id: $CIRCLE_WORKFLOW_ID
+
+  error_warn_job:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - run: exit 1
+      - run:
+          name: Warn of failed job
+          command: echo "Error encountered!!!!!!!!!!!!"
+          when: on_fail
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  say-hello-workflow:
+    jobs:
+      - print_hello
+      - save_hello_world_output
+      - new_cmds_job
+      - error_warn_job
+      - print_output_file:
+          requires: [save_hello_world_output]
+      
